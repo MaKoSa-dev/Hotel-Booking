@@ -2,6 +2,7 @@ import java.util.*;
 
 abstract class Room {
     ArrayList<String> services = new ArrayList<>();
+    ArrayList<String> additionalservices = new ArrayList<>();
     int quantityOfRoom;
     int cost;
 
@@ -9,6 +10,7 @@ abstract class Room {
     abstract void reserve(int x);
     abstract void displayServices();
     abstract void displayavailable();
+    abstract void changeServices();
 }
 
 class OrdinaryRoom extends Room {
@@ -17,14 +19,16 @@ class OrdinaryRoom extends Room {
         quantityOfRoom = rand.nextInt(30) + 1;
         cost = 30;
         services.add("Breakfast");
+        additionalservices.addAll(Arrays.asList("Dinner", "Cleaning", "Free parking", "Private gym"));
     }
 
     @Override
     void displayServices() {
         System.out.println("\n──────────── Ordinary Room Details ────────────");
-        System.out.println(" 🛎 Services: " + services);
+        System.out.println(" ✨ Services: " + services);
         System.out.println(" 💲 Cost per room: $" + cost);
         System.out.println(" 🏨 Available rooms: " + quantityOfRoom);
+        System.out.println(" ➕ Additional services: " + additionalservices);
         System.out.println("──────────────────────────────────────────────\n");
     }
 
@@ -43,6 +47,10 @@ class OrdinaryRoom extends Room {
             this.quantityOfRoom -= x;
             System.out.println(" Remaining rooms: " + quantityOfRoom);
         }
+    }
+
+    void changeServices() {
+
     }
 }
 
@@ -78,6 +86,9 @@ class VIPRoom extends Room {
             this.quantityOfRoom -= x;
             System.out.println(" Remaining rooms: " + quantityOfRoom);
         }
+    }
+    void changeServices() {
+
     }
 }
 
@@ -117,16 +128,24 @@ class PresidentialRoom extends Room {
             System.out.println(" Remaining rooms: " + quantityOfRoom);
         }
     }
+    void changeServices() {
+
+    }
 }
 
 public class Java {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-                System.out.println("\n══════════════════════════════════════");
+        System.out.println("\n═════════════════════════════════════════");
         System.out.println("      ⭐️ Welcome to Wawligim-ai Hotel ⭐️");
         System.out.println("      Assistant: Kairat Nurtas 🎤");
-        System.out.println("══════════════════════════════════════");
+        System.out.println("═════════════════════════════════════════");
 
+        System.out.print("      Name: ");
+        String name=sc.nextLine();
+        System.out.print("      Contacts: ");
+        String contacts=sc.nextLine();
+        System.out.println("═════════════════════════════════════════");
         Room ordinary = new OrdinaryRoom();
         Room vip = new VIPRoom();
         Room president = new PresidentialRoom();
@@ -151,19 +170,30 @@ public class Java {
 
             String type = sc.next();
 
-            // Show services if typed like "1?"
-            if (type.length() == 2 && type.charAt(1) == '?') {
-                if (type.charAt(0) == '1') ordinary.displayServices();
-                else if (type.charAt(0) == '2') vip.displayServices();
-                else if (type.charAt(0) == '3') president.displayServices();
-                else System.out.println("❌ Invalid choice!");
-                continue;
-            }
-
             bron = 1;
             char type_room = type.charAt(0);
 
             if (type_room == '1') {
+                ordinary.displayServices();
+                while (true){
+                    ArrayList<String> temp = new ArrayList<>();
+                    System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm):");
+                    int choiceadditional=sc.nextInt();
+                    sc.nextLine();
+                    switch (choiceadditional) {
+                        case 1:
+                            System.out.println("Input additional services (Split by comma)");
+                            String line=sc.nextLine();
+                            temp.addAll(Arrays.asList(line.split(",")));
+                            System.out.println(temp);
+                            ordinary.changeServices();
+                            break;
+                        case 2:
+                            System.out.println("Input services (Split by space)");
+                            break;
+                    }
+                    if (choiceadditional==3) break;
+                }
                 System.out.print("How many rooms?: ");
                 int count = sc.nextInt();
                 ordinary.reserve(count);
@@ -171,6 +201,7 @@ public class Java {
             }
 
             else if (type_room == '2') {
+                vip.displayServices();
                 System.out.print("How many rooms?: ");
                 int count = sc.nextInt();
                 vip.reserve(count);
@@ -178,6 +209,7 @@ public class Java {
             }
 
             else if (type_room == '3') {
+                president.displayServices();
                 System.out.print("How many rooms?: ");
                 int count = sc.nextInt();
                 president.reserve(count);
