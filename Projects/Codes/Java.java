@@ -20,7 +20,7 @@ class OrdinaryRoom extends Room {
         quantityOfRoom = rand.nextInt(30) + 1;
         cost = 30;
         services.add("Breakfast");
-        additionalservices.addAll(Arrays.asList("Dinner", "Cleaning", "Free parking", "Private gym"));
+        additionalservices.addAll(Arrays.asList("Dinner", "Cleaning", "Free-Parking", "Private-gym", "Jacuzzi", "Love-Box", "Spa"));
     }
 
     @Override
@@ -76,7 +76,8 @@ class VIPRoom extends Room {
         Random rand = new Random();
         quantityOfRoom = rand.nextInt(15) + 1;
         cost = 50;
-        services.addAll(Arrays.asList("Breakfast", "Dinner", "Cleaning", "Free parking", "Jacuzzi"));
+        services.addAll(Arrays.asList("Breakfast", "Dinner", "Cleaning", "Free-Parking", "Jacuzzi"));
+        additionalservices.addAll(Arrays.asList("Private-gym", "Mini-bar" , "Love-Box", "Spa"));
     }
 
     @Override
@@ -90,6 +91,7 @@ class VIPRoom extends Room {
         System.out.println(" 🛎 Services: " + services);
         System.out.println(" 💲 Cost per room: $" + cost);
         System.out.println(" 🏨 Available rooms: " + quantityOfRoom);
+        System.out.println(" ➕ Additional services: " + additionalservices);
         System.out.println("───────────────────────────────────────────\n");
     }
 
@@ -109,11 +111,21 @@ class VIPRoom extends Room {
 
     @Override
     void addServices(ArrayList<String> newServices) {
+        for(String i: newServices){
+            i=i.replaceAll(" ", "");
+            if(services.contains(i) || i.length()==0);
+            else{
+                if(additionalservices.contains(i)) services.add(i);
+            }
+        }
     }
 
     @Override
     void removeServices(ArrayList<String> oldServices) {
-
+        for(String i: oldServices){
+            i=i.replaceAll(" ", "");
+            if(services.contains(i) || i.length()!=0) services.remove(i);
+        }
     }
 }
 class PresidentialRoom extends Room {
@@ -125,6 +137,7 @@ class PresidentialRoom extends Room {
                 "Breakfast", "Dinner", "Cleaning", "Free parking",
                 "Private gym", "Premium mini-bar", "Terrace with view"
         ));
+        additionalservices.addAll(Arrays.asList("Love-Box", "Spa"));
     }
 
     @Override
@@ -138,6 +151,7 @@ class PresidentialRoom extends Room {
         System.out.println(" 👑 Services: " + services);
         System.out.println(" 💲 Cost per room: $" + cost);
         System.out.println(" 🏨 Available rooms: " + quantityOfRoom);
+        System.out.println(" ➕ Additional services: " + additionalservices);
         System.out.println("────────────────────────────────────────────────\n");
     }
 
@@ -157,11 +171,21 @@ class PresidentialRoom extends Room {
 
     @Override
     void addServices(ArrayList<String> newServices) {
+        for(String i: newServices){
+            i=i.replaceAll(" ", "");
+            if(services.contains(i) || i.length()==0);
+            else{
+                if(additionalservices.contains(i)) services.add(i);
+            }
+        }
     }
 
     @Override
     void removeServices(ArrayList<String> oldServices) {
-
+        for(String i: oldServices){
+            i=i.replaceAll(" ", "");
+            if(services.contains(i) || i.length()!=0) services.remove(i);
+        }
     }
 }
         public class Java {
@@ -208,7 +232,7 @@ class PresidentialRoom extends Room {
                         ordinary.displayServices();
                         while (true) {
                             ArrayList<String> temp = new ArrayList<>();
-                            System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm):");
+                            System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm): ");
                             int choiceadditional = sc.nextInt();
                             sc.nextLine();
                             switch (choiceadditional) {
@@ -235,12 +259,58 @@ class PresidentialRoom extends Room {
                         current_cost += ordinary.cost(count);
                     } else if (type_room == '2') {
                         vip.displayServices();
+                        while (true) {
+                            ArrayList<String> temp = new ArrayList<>();
+                            System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm): ");
+                            int choiceadditional = sc.nextInt();
+                            sc.nextLine();
+                            switch (choiceadditional) {
+                                case 1:
+                                    System.out.println("Input additional services (Split by comma)");
+                                    String line1 = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line1.split(",")));
+                                    vip.addServices(temp);
+                                    vip.displayServices();
+                                    break;
+                                case 2:
+                                    System.out.println("Input services (Split by comma)");
+                                    String line2 = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line2.split(",")));
+                                    vip.removeServices(temp);
+                                    vip.displayServices();
+                                    break;
+                            }
+                            if (choiceadditional == 3) break;
+                        }
                         System.out.print("How many rooms?: ");
                         int count = sc.nextInt();
                         vip.reserve(count);
                         current_cost += vip.cost(count);
                     } else if (type_room == '3') {
                         president.displayServices();
+                        while (true) {
+                            ArrayList<String> temp = new ArrayList<>();
+                            System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm): ");
+                            int choiceadditional = sc.nextInt();
+                            sc.nextLine();
+                            switch (choiceadditional) {
+                                case 1:
+                                    System.out.println("Input additional services (Split by comma)");
+                                    String line1 = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line1.split(",")));
+                                    president.addServices(temp);
+                                    president.displayServices();
+                                    break;
+                                case 2:
+                                    System.out.println("Input services (Split by comma)");
+                                    String line2 = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line2.split(",")));
+                                    president.removeServices(temp);
+                                    president.displayServices();
+                                    break;
+                            }
+                            if (choiceadditional == 3) break;
+                        }
                         System.out.print("How many rooms?: ");
                         int count = sc.nextInt();
                         president.reserve(count);
