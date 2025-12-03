@@ -20,7 +20,7 @@ class OrdinaryRoom extends Room {
         quantityOfRoom = rand.nextInt(30) + 1;
         cost = 30;
         services.add("Breakfast");
-        additionalservices.addAll(Arrays.asList("Dinner", "Cleaning", "Free-Parking", "Private-gym", "Jacuzzi", "Love-Box", "Spa"));
+        additionalservices.addAll(Arrays.asList("Free-Parking", "Dinner","Spa", "Cleaning", "Private-gym", "Jacuzzi"));
     }
 
     @Override
@@ -58,7 +58,12 @@ class OrdinaryRoom extends Room {
             i=i.replaceAll(" ", "");
             if(services.contains(i) || i.length()==0);
             else{
-                if(additionalservices.contains(i)) services.add(i);
+                if(additionalservices.contains(i)) {
+                    services.add(i);
+                    if (0==additionalservices.indexOf(i)) cost+=2;
+                    else if (0<additionalservices.indexOf(i) && 3>additionalservices.indexOf(i)) cost+=5;
+                    else if (3<=additionalservices.indexOf(i) && 6>additionalservices.indexOf(i)) cost+=10;
+                }
             }
         }
     }
@@ -67,7 +72,13 @@ class OrdinaryRoom extends Room {
     void removeServices(ArrayList<String> oldServices) {
         for(String i: oldServices){
             i=i.replaceAll(" ", "");
-            if(services.contains(i) || i.length()!=0) services.remove(i);
+            if(services.contains(i) || i.length()!=0) {
+                services.remove(i);
+                if (i!="breakfast"){
+                    if (0==additionalservices.indexOf(i)) cost-=2;
+                    else if (0<additionalservices.indexOf(i) && 3>additionalservices.indexOf(i)) cost-=5;
+                    else if (3<=additionalservices.indexOf(i) && 6>additionalservices.indexOf(i)) cost-=10;                }
+            }
         }
     }
 }
@@ -77,7 +88,7 @@ class VIPRoom extends Room {
         quantityOfRoom = rand.nextInt(15) + 1;
         cost = 50;
         services.addAll(Arrays.asList("Breakfast", "Dinner", "Cleaning", "Free-Parking", "Jacuzzi"));
-        additionalservices.addAll(Arrays.asList("Private-gym", "Mini-bar" , "Love-Box", "Spa"));
+        additionalservices.addAll(Arrays.asList("Private-gym", "Mini-bar" , "Spa"));
     }
 
     @Override
@@ -115,7 +126,10 @@ class VIPRoom extends Room {
             i=i.replaceAll(" ", "");
             if(services.contains(i) || i.length()==0);
             else{
-                if(additionalservices.contains(i)) services.add(i);
+                if(additionalservices.contains(i)) {
+                    services.add(i);
+                    if (0<=additionalservices.indexOf(i) && 2>=additionalservices.indexOf(i)) cost+=5;
+                }
             }
         }
     }
@@ -124,7 +138,12 @@ class VIPRoom extends Room {
     void removeServices(ArrayList<String> oldServices) {
         for(String i: oldServices){
             i=i.replaceAll(" ", "");
-            if(services.contains(i) || i.length()!=0) services.remove(i);
+            if(services.contains(i) || i.length()!=0) {
+                services.remove(i);
+                if (i!="breakfast"){
+                   if (0<=additionalservices.indexOf(i) && 2>=additionalservices.indexOf(i)) cost-=5;
+                }
+            }
         }
     }
 }
@@ -134,8 +153,8 @@ class PresidentialRoom extends Room {
         quantityOfRoom = rand.nextInt(5) + 1;
         cost = 120;
         services.addAll(Arrays.asList(
-                "Breakfast", "Dinner", "Cleaning", "Free parking",
-                "Private gym", "Premium mini-bar", "Terrace with view"
+                "Breakfast", "Dinner", "Cleaning", "Free-parking",
+                "Private-gym", "Mini-bar", "Terrace"
         ));
         additionalservices.addAll(Arrays.asList("Love-Box", "Spa"));
     }
@@ -175,7 +194,10 @@ class PresidentialRoom extends Room {
             i=i.replaceAll(" ", "");
             if(services.contains(i) || i.length()==0);
             else{
-                if(additionalservices.contains(i)) services.add(i);
+                if(additionalservices.contains(i)) {
+                    services.add(i);
+                    if (0<=additionalservices.indexOf(i) && 2>=additionalservices.indexOf(i)) cost-=5;
+                }
             }
         }
     }
@@ -184,7 +206,12 @@ class PresidentialRoom extends Room {
     void removeServices(ArrayList<String> oldServices) {
         for(String i: oldServices){
             i=i.replaceAll(" ", "");
-            if(services.contains(i) || i.length()!=0) services.remove(i);
+            if(services.contains(i) || i.length()!=0) {
+                services.remove(i);
+                if (i!="breakfast"){
+                    if (0<=additionalservices.indexOf(i) && 3>=additionalservices.indexOf(i)) cost-=5;
+                }
+            }
         }
     }
 }
@@ -256,7 +283,9 @@ class PresidentialRoom extends Room {
                         System.out.print("How many rooms?: ");
                         int count = sc.nextInt();
                         ordinary.reserve(count);
-                        current_cost += ordinary.cost(count);
+                        System.out.print("How many days?: ");
+                        int days = sc.nextInt();
+                        current_cost += ordinary.cost(count) * days;
                     } else if (type_room == '2') {
                         vip.displayServices();
                         while (true) {
@@ -285,7 +314,9 @@ class PresidentialRoom extends Room {
                         System.out.print("How many rooms?: ");
                         int count = sc.nextInt();
                         vip.reserve(count);
-                        current_cost += vip.cost(count);
+                        System.out.print("How many days?: ");
+                        int days = sc.nextInt();
+                        current_cost += vip.cost(count) * days;
                     } else if (type_room == '3') {
                         president.displayServices();
                         while (true) {
@@ -314,11 +345,22 @@ class PresidentialRoom extends Room {
                         System.out.print("How many rooms?: ");
                         int count = sc.nextInt();
                         president.reserve(count);
-                        current_cost += president.cost(count);
+                        System.out.print("How many days?: ");
+                        int days = sc.nextInt();
+                        current_cost += president.cost(count) * days;
                     } else if (type_room == '4') {
                         System.out.println("\n══════════════════════════════════════");
-                        System.out.println(" 💳 Payment section");
-                        System.out.println(" Total amount: $" + current_cost);
+                        if(current_cost!=0){
+                            System.out.println(" 💳 Payment section\n");
+                            System.out.println("Paid By | Name: " + name+" | Contact: " + contacts);
+                            System.out.println("══════════════════════════════════════");
+                            System.out.println("Description\t|\tPrice\t|\tDays\t|\tAmount");
+
+
+
+                            System.out.println("Total amount: $" + (current_cost));
+                            System.out.println("══════════════════════════════════════");
+                        }
                         System.out.println(" Thank you for choosing our hotel! 🌟");
                         System.out.println("══════════════════════════════════════");
                         break;
