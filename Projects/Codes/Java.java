@@ -10,7 +10,8 @@ abstract class Room {
     abstract void reserve(int x);
     abstract void displayServices();
     abstract void displayavailable();
-    abstract void changeServices(ArrayList<String> temp);
+    abstract void addServices(ArrayList<String> temp);
+    abstract void removeServices(ArrayList<String> temp);
 }
 
 class OrdinaryRoom extends Room {
@@ -52,16 +53,24 @@ class OrdinaryRoom extends Room {
     }
 
     @Override
-    void changeServices(ArrayList<String> newServices) {
+    void addServices(ArrayList<String> newServices) {
         for(String i: newServices){
-            if(services.contains(i));
+            i=i.replaceAll(" ", "");
+            if(services.contains(i) || i.length()==0);
             else{
-                services.add(i.replaceAll(" ", ""));
+                if(additionalservices.contains(i)) services.add(i);
             }
         }
     }
-}
 
+    @Override
+    void removeServices(ArrayList<String> oldServices) {
+        for(String i: oldServices){
+            i=i.replaceAll(" ", "");
+            if(services.contains(i) || i.length()!=0) services.remove(i);
+        }
+    }
+}
 class VIPRoom extends Room {
     VIPRoom() {
         Random rand = new Random();
@@ -99,7 +108,12 @@ class VIPRoom extends Room {
     }
 
     @Override
-    void changeServices(ArrayList<String> newServices) {
+    void addServices(ArrayList<String> newServices) {
+    }
+
+    @Override
+    void removeServices(ArrayList<String> oldServices) {
+
     }
 }
 class PresidentialRoom extends Room {
@@ -142,7 +156,12 @@ class PresidentialRoom extends Room {
     }
 
     @Override
-    void changeServices(ArrayList<String> newServices) {
+    void addServices(ArrayList<String> newServices) {
+    }
+
+    @Override
+    void removeServices(ArrayList<String> oldServices) {
+
     }
 }
         public class Java {
@@ -195,13 +214,17 @@ class PresidentialRoom extends Room {
                             switch (choiceadditional) {
                                 case 1:
                                     System.out.println("Input additional services (Split by comma)");
-                                    String line = sc.nextLine();
-                                    temp.addAll(Arrays.asList(line.split(",")));
-                                    ordinary.changeServices(temp);
+                                    String line1 = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line1.split(",")));
+                                    ordinary.addServices(temp);
                                     ordinary.displayServices();
                                     break;
                                 case 2:
-                                    System.out.println("Input services (Split by space)");
+                                    System.out.println("Input services (Split by comma)");
+                                    String line2 = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line2.split(",")));
+                                    ordinary.removeServices(temp);
+                                    ordinary.displayServices();
                                     break;
                             }
                             if (choiceadditional == 3) break;
