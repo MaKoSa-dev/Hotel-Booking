@@ -10,7 +10,7 @@ abstract class Room {
     abstract void reserve(int x);
     abstract void displayServices();
     abstract void displayavailable();
-    abstract void changeServices();
+    abstract void changeServices(ArrayList<String> temp);
 }
 
 class OrdinaryRoom extends Room {
@@ -37,7 +37,9 @@ class OrdinaryRoom extends Room {
         System.out.printf(" Ordinary → $%d | Available: %d rooms\n", cost, quantityOfRoom);
     }
 
-    int cost(int x) { return this.cost * x; }
+    int cost(int x) {
+        return this.cost * x;
+    }
 
     void reserve(int x) {
         if (x > this.quantityOfRoom) {
@@ -49,8 +51,14 @@ class OrdinaryRoom extends Room {
         }
     }
 
-    void changeServices() {
-
+    @Override
+    void changeServices(ArrayList<String> newServices) {
+        for(String i: newServices){
+            if(services.contains(i));
+            else{
+                services.add(i.replaceAll(" ", ""));
+            }
+        }
     }
 }
 
@@ -76,7 +84,9 @@ class VIPRoom extends Room {
         System.out.println("───────────────────────────────────────────\n");
     }
 
-    int cost(int x) { return this.cost * x; }
+    int cost(int x) {
+        return this.cost * x;
+    }
 
     void reserve(int x) {
         if (x > this.quantityOfRoom) {
@@ -87,11 +97,11 @@ class VIPRoom extends Room {
             System.out.println(" Remaining rooms: " + quantityOfRoom);
         }
     }
-    void changeServices() {
 
+    @Override
+    void changeServices(ArrayList<String> newServices) {
     }
 }
-
 class PresidentialRoom extends Room {
     PresidentialRoom() {
         Random rand = new Random();
@@ -117,7 +127,9 @@ class PresidentialRoom extends Room {
         System.out.println("────────────────────────────────────────────────\n");
     }
 
-    int cost(int x) { return this.cost * x; }
+    int cost(int x) {
+        return this.cost * x;
+    }
 
     void reserve(int x) {
         if (x > this.quantityOfRoom) {
@@ -128,106 +140,98 @@ class PresidentialRoom extends Room {
             System.out.println(" Remaining rooms: " + quantityOfRoom);
         }
     }
-    void changeServices() {
 
+    @Override
+    void changeServices(ArrayList<String> newServices) {
     }
 }
+        public class Java {
+            public static void main(String[] args) {
+                Scanner sc = new Scanner(System.in);
+                System.out.println("\n═════════════════════════════════════════");
+                System.out.println("      ⭐️ Welcome to Wawligim-ai Hotel ⭐️");
+                System.out.println("      Assistant: Kairat Nurtas 🎤");
+                System.out.println("═════════════════════════════════════════");
 
-public class Java {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\n═════════════════════════════════════════");
-        System.out.println("      ⭐️ Welcome to Wawligim-ai Hotel ⭐️");
-        System.out.println("      Assistant: Kairat Nurtas 🎤");
-        System.out.println("═════════════════════════════════════════");
+                System.out.print("      Name: ");
+                String name = sc.nextLine();
+                System.out.print("      Contacts: ");
+                String contacts = sc.nextLine();
+                System.out.println("═════════════════════════════════════════");
+                Room ordinary = new OrdinaryRoom();
+                Room vip = new VIPRoom();
+                Room president = new PresidentialRoom();
+                Room[] rooms = {ordinary, vip, president};
 
-        System.out.print("      Name: ");
-        String name=sc.nextLine();
-        System.out.print("      Contacts: ");
-        String contacts=sc.nextLine();
-        System.out.println("═════════════════════════════════════════");
-        Room ordinary = new OrdinaryRoom();
-        Room vip = new VIPRoom();
-        Room president = new PresidentialRoom();
-        Room[] rooms = {ordinary, vip, president};
+                int current_cost = 0;
+                int bron = 0;
 
-        int current_cost = 0;
-        int bron = 0;
+                while (true) {
 
-        while (true) {
+                    System.out.println("\n────────── Available Rooms ──────────");
+                    ordinary.displayavailable();
+                    vip.displayavailable();
+                    president.displayavailable();
+                    System.out.println("──────────────────────────────────────");
 
-            System.out.println("\n────────── Available Rooms ──────────");
-            ordinary.displayavailable();
-            vip.displayavailable();
-            president.displayavailable();
-            System.out.println("──────────────────────────────────────");
-
-            if (bron == 0) {
-                System.out.print("\nYour choice (1-Ordinary, 2-VIP, 3-President, 4-Pay): ");
-            } else {
-                System.out.println("\nIf you want to reserve again — enter room number.");
-            }
-
-            String type = sc.next();
-
-            bron = 1;
-            char type_room = type.charAt(0);
-
-            if (type_room == '1') {
-                ordinary.displayServices();
-                while (true){
-                    ArrayList<String> temp = new ArrayList<>();
-                    System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm):");
-                    int choiceadditional=sc.nextInt();
-                    sc.nextLine();
-                    switch (choiceadditional) {
-                        case 1:
-                            System.out.println("Input additional services (Split by comma)");
-                            String line=sc.nextLine();
-                            temp.addAll(Arrays.asList(line.split(",")));
-                            System.out.println(temp);
-                            ordinary.changeServices();
-                            break;
-                        case 2:
-                            System.out.println("Input services (Split by space)");
-                            break;
+                    if (bron == 0) {
+                        System.out.print("\nYour choice (1-Ordinary, 2-VIP, 3-President, 4-Pay): ");
+                    } else {
+                        System.out.println("\nIf you want to reserve again — enter room number.");
                     }
-                    if (choiceadditional==3) break;
+
+                    String type = sc.next();
+
+                    bron = 1;
+                    char type_room = type.charAt(0);
+
+                    if (type_room == '1') {
+                        ordinary.displayServices();
+                        while (true) {
+                            ArrayList<String> temp = new ArrayList<>();
+                            System.out.print("Services | Your choice (1-Add, 2-Remove, 3-Confirm):");
+                            int choiceadditional = sc.nextInt();
+                            sc.nextLine();
+                            switch (choiceadditional) {
+                                case 1:
+                                    System.out.println("Input additional services (Split by comma)");
+                                    String line = sc.nextLine();
+                                    temp.addAll(Arrays.asList(line.split(",")));
+                                    ordinary.changeServices(temp);
+                                    ordinary.displayServices();
+                                    break;
+                                case 2:
+                                    System.out.println("Input services (Split by space)");
+                                    break;
+                            }
+                            if (choiceadditional == 3) break;
+                        }
+                        System.out.print("How many rooms?: ");
+                        int count = sc.nextInt();
+                        ordinary.reserve(count);
+                        current_cost += ordinary.cost(count);
+                    } else if (type_room == '2') {
+                        vip.displayServices();
+                        System.out.print("How many rooms?: ");
+                        int count = sc.nextInt();
+                        vip.reserve(count);
+                        current_cost += vip.cost(count);
+                    } else if (type_room == '3') {
+                        president.displayServices();
+                        System.out.print("How many rooms?: ");
+                        int count = sc.nextInt();
+                        president.reserve(count);
+                        current_cost += president.cost(count);
+                    } else if (type_room == '4') {
+                        System.out.println("\n══════════════════════════════════════");
+                        System.out.println(" 💳 Payment section");
+                        System.out.println(" Total amount: $" + current_cost);
+                        System.out.println(" Thank you for choosing our hotel! 🌟");
+                        System.out.println("══════════════════════════════════════");
+                        break;
+                    } else {
+                        System.out.println("❌ Invalid option!");
+                    }
                 }
-                System.out.print("How many rooms?: ");
-                int count = sc.nextInt();
-                ordinary.reserve(count);
-                current_cost += ordinary.cost(count);
-            }
-
-            else if (type_room == '2') {
-                vip.displayServices();
-                System.out.print("How many rooms?: ");
-                int count = sc.nextInt();
-                vip.reserve(count);
-                current_cost += vip.cost(count);
-            }
-
-            else if (type_room == '3') {
-                president.displayServices();
-                System.out.print("How many rooms?: ");
-                int count = sc.nextInt();
-                president.reserve(count);
-                current_cost += president.cost(count);
-            }
-
-            else if (type_room == '4') {
-                System.out.println("\n══════════════════════════════════════");
-                System.out.println(" 💳 Payment section");
-                System.out.println(" Total amount: $" + current_cost);
-                System.out.println(" Thank you for choosing our hotel! 🌟");
-                System.out.println("══════════════════════════════════════");
-                break;
-            }
-
-            else {
-                System.out.println("❌ Invalid option!");
             }
         }
-    }
-}
