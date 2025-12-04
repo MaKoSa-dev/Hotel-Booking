@@ -250,7 +250,7 @@ class PresidentialRoom extends Room {
     }
 
     void reserve(int x) {
-        if (x > this.quantityOfRoom) {
+        if (x > this.quantityOfRoom || x<=0) {
             System.out.println("❌ INVALID! Available rooms only: " + quantityOfRoom);
         } else {
             System.out.println("✅ Successfully reserved!");
@@ -369,7 +369,8 @@ public class Java {
                 ordinary.reserve(count);
                 System.out.print("How many days?: ");
                 int days = sc.nextInt();
-                current_cost += ordinary.cost(count) * days;
+                if (count > ordinary.quantityOfRoom || count<=0);
+                else current_cost += ordinary.cost(count) * days;
             } else if (type_room == '2') {
                 vip.displayServices();
                 while (true) {
@@ -400,7 +401,8 @@ public class Java {
                 vip.reserve(count);
                 System.out.print("How many days?: ");
                 int days = sc.nextInt();
-                current_cost += vip.cost(count) * days;
+                if (count > vip.quantityOfRoom || count<=0);
+                else current_cost += vip.cost(count) * days;
             } else if (type_room == '3') {
                 president.displayServices();
                 while (true) {
@@ -431,7 +433,8 @@ public class Java {
                 president.reserve(count);
                 System.out.print("How many days?: ");
                 int days = sc.nextInt();
-                current_cost += president.cost(count) * days;
+                if (count > president.quantityOfRoom || count<=0);
+                else current_cost += president.cost(count) * days;
             } else if (type_room == '4') {
                 System.out.println("\n══════════════════════════════════════");
                 if(current_cost!=0){
